@@ -79,7 +79,7 @@ app.get('/edit/:itemId',(req, res) => {
     let query = connection.query(sql,(err, result) => {
         if(err) throw err;
         res.render('items_edit', {
-            title : 'CRUD Operation using NodeJS / ExpressJS / MySQL',
+            title : 'Edit Item',
             item : result[0]
         });
     });
