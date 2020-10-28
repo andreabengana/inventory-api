@@ -4,7 +4,7 @@ const mysql = require('mysql');
 
 const app = express();
 
-const SEL_ALL = 'SELECT * FROM person';
+const SEL_ALL = 'SELECT * FROM items';
 
 const connection = mysql.createConnection({
     host: 'localhost',
@@ -22,7 +22,7 @@ connection.connect(err => {
 console.log(connection);
 app.use(cors());
 
-app.get('/products', (req, res) => {
+app.get('/items', (req, res) => {
     connection.query(SEL_ALL, (err, results) => {
         if(err){
             return res.send(err);
@@ -35,9 +35,17 @@ app.get('/products', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-    res.send('hello from house')
+    connection.query(SEL_ALL, (err, results) => {
+        if(err){
+            return res.send(err);
+        } else {
+            return res.json({
+                data: results
+            })
+        }
+    });
 });
 
 app.listen(4000, () => {
-    console.log(`bro`)
+    console.log(`test`)
 });
