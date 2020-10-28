@@ -94,6 +94,15 @@ app.post('/update',(req, res) => {
     });
 });
 
+app.put('/update',(req, res) => {
+    const userId = req.body.id;
+    let sql = "update items SET name='"+req.body.name+"',  qty='"+req.body.qty+"',  amount='"+req.body.amount+"' where id ="+userId;
+    let query = connection.query(sql,(err, results) => {
+      if(err) throw err;
+      res.redirect('/');
+    });
+});
+
 app.get('/delete/:itemId',(req, res) => {
     const userId = req.params.itemId;
     let sql = `DELETE from items where id = ${itemId}`;
