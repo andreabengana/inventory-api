@@ -72,10 +72,10 @@ app.post('/save',(req, res) => {
     });
 });
 
-app.get('/edit/:userId',(req, res) => {
-    console.log(req.params.userId);
-    const userId = req.params.userId;
-    let sql = `Select * from items where id = ${userId}`;
+app.get('/edit/:itemId',(req, res) => {
+    console.log(req.params);
+    const itemId = req.params.itemId;
+    let sql = `Select * from items where id = ${itemId}`;
     let query = connection.query(sql,(err, result) => {
         if(err) throw err;
         res.render('items_edit', {
@@ -91,6 +91,15 @@ app.post('/update',(req, res) => {
     let query = connection.query(sql,(err, results) => {
       if(err) throw err;
       res.redirect('/');
+    });
+});
+
+app.get('/delete/:itemId',(req, res) => {
+    const userId = req.params.itemId;
+    let sql = `DELETE from items where id = ${itemId}`;
+    let query = connection.query(sql,(err, result) => {
+        if(err) throw err;
+        res.redirect('/');
     });
 });
 
