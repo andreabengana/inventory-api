@@ -57,6 +57,21 @@ app.get('/items', (req, res) => {
     });
 });
 
+app.get('/add',(req, res) => {
+    res.render('items_add', {
+        title : 'Add Item'
+    });
+});
+ 
+app.post('/save',(req, res) => { 
+    let data = {name: req.body.name, qty: req.body.qty, amount: req.body.amount};
+    let sql = "INSERT INTO items SET ?";
+    let query = connection.query(sql, data,(err, results) => {
+      if(err) throw err;
+      res.redirect('/');
+    });
+});
+
 app.listen(4000, () => {
     console.log(`test`)
 });
