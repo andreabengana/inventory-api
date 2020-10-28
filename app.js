@@ -1,6 +1,9 @@
 const express = require('express');
+const path = require('path');
 const cors = require('cors');
 const mysql = require('mysql');
+const ejs = require('ejs');
+const bodyParser = require('body-parser');
 
 const app = express();
 
@@ -19,22 +22,30 @@ connection.connect(err => {
     }
 });
 
-console.log(connection);
-app.use(cors());
+app.set('views',path.join(__dirname,'views'));
+			
+app.set('view engine', 'ejs');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
-app.get('/items', (req, res) => {
+console.log(connection);
+
+
+app.use(cors());
+app.get('/', (req, res) => {
     connection.query(SEL_ALL, (err, results) => {
         if(err){
             return res.send(err);
         } else {
-            return res.json({
-                data: results
+            return res.render('items_index', {
+                title : 'Items',
+                item : results
             })
         }
     });
 });
 
-app.get('/', (req, res) => {
+app.get('/items', (req, res) => {
     connection.query(SEL_ALL, (err, results) => {
         if(err){
             return res.send(err);
