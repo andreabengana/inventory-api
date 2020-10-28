@@ -72,6 +72,28 @@ app.post('/save',(req, res) => {
     });
 });
 
+app.get('/edit/:userId',(req, res) => {
+    console.log(req.params.userId);
+    const userId = req.params.userId;
+    let sql = `Select * from items where id = ${userId}`;
+    let query = connection.query(sql,(err, result) => {
+        if(err) throw err;
+        res.render('items_edit', {
+            title : 'CRUD Operation using NodeJS / ExpressJS / MySQL',
+            item : result[0]
+        });
+    });
+});
+
+app.post('/update',(req, res) => {
+    const userId = req.body.id;
+    let sql = "update items SET name='"+req.body.name+"',  qty='"+req.body.qty+"',  amount='"+req.body.amount+"' where id ="+userId;
+    let query = connection.query(sql,(err, results) => {
+      if(err) throw err;
+      res.redirect('/');
+    });
+});
+
 app.listen(4000, () => {
     console.log(`test`)
 });
