@@ -39,9 +39,7 @@ app.get('/posts', (req, res) => {
             return res.send(err);
         } else {
             console.log("act");
-            return res.json({
-                data: results
-            })
+            return res.json(results);
         }
     });
 });
