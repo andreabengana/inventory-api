@@ -32,7 +32,16 @@ console.log(connection);
 
 
 app.use(cors());
-
+app.get('/', (req, res) => {
+    connection.query(SEL_ALL, (err, results) => {
+        if(err){
+            return res.send(err);
+        } else {
+            console.log("act");
+            return res.json(results);
+        }
+    });
+});
 app.get('/posts', (req, res) => {
     connection.query(SEL_ALL, (err, results) => {
         if(err){
@@ -50,17 +59,28 @@ app.post('/save',(req, res) => {
     let sql = "INSERT INTO posts SET ?";
     let query = connection.query(sql, data,(err, results) => {
       if(err) throw err;
-      res.redirect('/');
+      //res.redirect('/');
     });
 });
 
 
-app.put('/update',(req, res) => {
+app.post('/update',(req, res) => {
     const postId = req.body.id;
-    let sql = "update posts SET title='"+req.body.title+"' where id ="+postId;
-    let query = connection.query(sql,(err, results) => {
-      if(err) throw err;
+    let data = {id: req.body.id, title: req.body.title};
+    let sql = `UPDATE posts SET title = '${req.body.title}' where id = ${postId}`;
+    console.log(sql);
+    let query = connection.query(sql, (err, results) => {
+      if(err) throw console.log(err);
       res.redirect('/');
+      /*if(err){
+        console.log("no");
+        return res.send(err);
+      } else {
+        console.log("activ");
+        return res.json({
+            data: result
+        })
+      }*/
     });
 });
 
