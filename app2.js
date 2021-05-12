@@ -63,6 +63,22 @@ app.post('/login', (req, res) => {
     });
 });
 
+app.post('/addusers', (req, res) => {
+    let data = {
+        user_firstname: req.body.firstName, 
+        user_lastname: req.body.lastName, 
+        user_number: req.body.number,
+        user_password: req.body.password,
+        user_type: req.body.usertype
+    };
+    let sql = "INSERT INTO users SET ?";
+    let query = connection.query(sql, data,(err, results) => {
+      if(err) throw err;
+      res.redirect('/');
+    });
+});
+
+
 app.get('/products', (req, res) => {
     connection.query(SEL_ALL_PRODUCTS, (err, results) => {
         if(err){
