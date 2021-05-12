@@ -7,7 +7,9 @@ const bodyParser = require('body-parser');
 
 const app = express();
 
-const SEL_ALL = 'SELECT * FROM users';
+const SEL_ALL_USR = 'SELECT * FROM users';
+const SEL_ALL_PRODUCTS = 'SELECT * FROM products';
+
 
 const connection = mysql.createConnection({
     host: 'localhost',
@@ -35,7 +37,34 @@ app.use(cors());
 
 
 app.get('/users', (req, res) => {
-    connection.query(SEL_ALL, (err, results) => {
+    connection.query(SEL_ALL_USR, (err, results) => {
+        if(err){
+            return res.send(err);
+        } else {
+            return res.json({
+                data: results
+            })
+        }
+    });
+});
+
+app.post('/login', (req, res) => {
+    let data = {user_number: req.body.user_number};
+    let sql = "SELECT * FROM users WHERE ?";
+    connection.query(sql, data,(err, results) => {
+        if(err){
+            return res.send(err);
+        } else {
+            return res.json({
+                data: results,
+                foo: req.body.user_number
+            })
+        }
+    });
+});
+
+app.get('/products', (req, res) => {
+    connection.query(SEL_ALL_PRODUCTS, (err, results) => {
         if(err){
             return res.send(err);
         } else {
@@ -51,6 +80,15 @@ app.get('/users', (req, res) => {
 app.post('/saveusers',(req, res) => { 
     let data = {name: req.body.name, qty: req.body.qty, amount: req.body.amount};
     let sql = "INSERT INTO users SET ?";
+    let query = connection.query(sql, data,(err, results) => {
+      if(err) throw err;
+      res.redirect('/');
+    });
+});
+
+app.post('/saveproducts',(req, res) => { 
+    let data = {name: req.body.name, qty: req.body.qty, amount: req.body.amount};
+    let sql = "INSERT INTO products SET ?";
     let query = connection.query(sql, data,(err, results) => {
       if(err) throw err;
       res.redirect('/');
